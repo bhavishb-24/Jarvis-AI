@@ -52,4 +52,12 @@ class SettingsStore(context: Context) {
         require(group in CapabilityPolicy.groups)
         prefs.edit().putBoolean("capability_${deviceId}_$group", enabled).apply()
     }
+
+    var homeAssistantUrl: String
+        get() = prefs.getString("home_assistant_url", "").orEmpty()
+        set(value) { prefs.edit().putString("home_assistant_url", value.trimEnd('/')).apply() }
+
+    var deskLightEntity: String
+        get() = prefs.getString("desk_light_entity", "").orEmpty()
+        set(value) { prefs.edit().putString("desk_light_entity", value.trim()).apply() }
 }

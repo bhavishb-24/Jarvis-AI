@@ -39,6 +39,9 @@ class KeyVault(context: Context) {
     fun deviceToken(deviceId: String): String = readSecret("device_$deviceId")
     fun removeDeviceToken(deviceId: String) { prefs.edit().remove("device_$deviceId").apply() }
 
+    fun saveHomeAssistantToken(value: String) = saveSecret("home_assistant_token", value)
+    fun homeAssistantToken(): String = readSecret("home_assistant_token")
+
     private fun saveSecret(name: String, value: String) {
         val clean = value.trim()
         if (clean.isEmpty()) {

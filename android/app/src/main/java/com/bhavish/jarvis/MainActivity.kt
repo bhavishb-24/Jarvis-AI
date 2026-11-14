@@ -85,7 +85,7 @@ internal val Muted = Color(0xFF9CB5BF)
 
 private enum class Page(val title: String) {
     HUD("HUD"), CHAT("Conversation"), MEMORY("Memory"), PROVIDERS("Providers"),
-    VOICE("Voice"), DEVICES("Devices"), TASKS("Tasks"), ROUTINES("Routines"),
+    VOICE("Voice"), DEVICES("Devices"), TASKS("Tasks"), ROUTINES("Routines"), HOME("Home"),
     PLUGINS("Plugins"), SETTINGS("Settings")
 }
 
@@ -195,6 +195,7 @@ private fun JarvisRoot(app: JarvisApplication, voice: VoiceManager) {
                     Page.DEVICES -> DevicesScreen(app)
                     Page.TASKS -> TasksScreen(app)
                     Page.ROUTINES -> ScheduleScreen(app)
+                    Page.HOME -> HomeScreen(app)
                     Page.PLUGINS -> CapabilityScreen(app)
                     Page.SETTINGS -> SettingsScreen(onProviders = { page = Page.PROVIDERS },
                         onVoice = { page = Page.VOICE })
