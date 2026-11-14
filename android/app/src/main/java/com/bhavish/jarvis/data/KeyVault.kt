@@ -11,7 +11,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-/** Encrypts each provider key before it reaches app-private preferences. */
+/** Encrypts provider keys and paired-device tokens before private preferences. */
 class KeyVault(context: Context) {
     private val prefs = context.getSharedPreferences("encrypted_provider_keys", Context.MODE_PRIVATE)
     private val alias = "jarvis_provider_keys_v1"
@@ -29,21 +29,31 @@ class KeyVault(context: Context) {
         }.generateKey()
     }
 
-    fun save(provider: ProviderId, value: String) {
+    fun save(provider: ProviderId, value: String) = saveSecret(provider.name, value)
+
+    fun read(provider: ProviderId): String = readSecret(provider.name)
+
+    fun configured(provider: ProviderId): Boolean = prefs.contains(provider.name)
+
+    fun saveDeviceToken(deviceId: String, value: String) = saveSecret("device_$deviceId", value)
+    fun deviceToken(deviceId: String): String = readSecret("device_$deviceId")
+    fun removeDeviceToken(deviceId: String) { prefs.edit().remove("device_$deviceId").apply() }
+
+    private fun saveSecret(name: String, value: String) {
         val clean = value.trim()
         if (clean.isEmpty()) {
-            prefs.edit().remove(provider.name).apply()
+            prefs.edit().remove(name).apply()
             return
         }
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, key())
         val ciphertext = cipher.doFinal(clean.toByteArray(Charsets.UTF_8))
         val payload = cipher.iv + ciphertext
-        prefs.edit().putString(provider.name, Base64.encodeToString(payload, Base64.NO_WRAP)).apply()
+        prefs.edit().putString(name, Base64.encodeToString(payload, Base64.NO_WRAP)).apply()
     }
 
-    fun read(provider: ProviderId): String {
-        val encoded = prefs.getString(provider.name, null) ?: return ""
+    private fun readSecret(name: String): String {
+        val encoded = prefs.getString(name, null) ?: return ""
         return try {
             val payload = Base64.decode(encoded, Base64.NO_WRAP)
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
@@ -54,5 +64,4 @@ class KeyVault(context: Context) {
         }
     }
 
-    fun configured(provider: ProviderId): Boolean = prefs.contains(provider.name)
 }

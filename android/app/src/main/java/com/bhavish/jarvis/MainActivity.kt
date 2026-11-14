@@ -192,8 +192,8 @@ private fun JarvisRoot(app: JarvisApplication, voice: VoiceManager) {
                         onSelected = { selectedProvider = it }, onNotice = { notice = it })
                     Page.VOICE -> VoiceScreen(app, voice, listening, speaking, onMic,
                         onNotice = { notice = it })
-                    Page.DEVICES -> FutureScreen("Devices", "Computer companion pairing is planned for Stage 2. This phone is the JARVIS host.")
-                    Page.TASKS -> FutureScreen("Tasks", "Checkpointed AI tasks are planned for a later stage. No task is running.")
+                    Page.DEVICES -> DevicesScreen(app)
+                    Page.TASKS -> TasksScreen(app)
                     Page.ROUTINES -> FutureScreen("Routines", "Scheduled routines are planned for a later stage. No routine is active.")
                     Page.PLUGINS -> FutureScreen("Plugins", "Android plugin execution is planned for a later stage. Desktop Python plugins remain in the desktop app.")
                     Page.SETTINGS -> SettingsScreen(onProviders = { page = Page.PROVIDERS },

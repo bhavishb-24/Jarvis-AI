@@ -1023,3 +1023,7 @@ Engineered by a developer building a real-world JARVIS-style assistant.
 | --- | --- |
 | YouTube | [@FatihMakes](https://www.youtube.com/@FatihMakes) |
 | Instagram | [@fatihmakes](https://www.instagram.com/fatihmakes) |
+
+## Android-first JARVIS (Stages 1 and 2)
+
+The Android app is in [`android/`](android/). Stage 2 adds authenticated Windows and macOS computer agents in [`companion/`](companion/), with phone-side device pairing, task planning, approval, progress, and cancellation. See the [companion setup guide](companion/README.md), [transport architecture](docs/android-stage2-architecture.md), and [feature parity checklist](docs/android-stage2-parity.md). Stage 2 hardware validation and several feature-parity items are still open; see the checklist before relying on remote control.
