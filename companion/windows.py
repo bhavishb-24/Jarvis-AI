@@ -307,9 +307,24 @@ class WindowsAdapter:
 
     def _app_launch(self, args, cancel):
         self._module("os")
-        path = self._path(self._string(args, "path"), must_exist=True)
-        if not path.is_file() or path.suffix.lower() not in {".exe", ".lnk"}:
-            raise ValueError("app path must be an .exe or .lnk file within an allowed root")
+        if "path" in args:
+            path = self._path(self._string(args, "path"), must_exist=True)
+            if not path.is_file() or path.suffix.lower() not in {".exe", ".lnk"}:
+                raise ValueError("app path must be an .exe or .lnk file within an allowed root")
+        else:
+            app = self._string({"app": args.get("app", args.get("name"))}, "app", limit=256)
+            if any(char in app for char in "\\/:") or app in (".", ".."):
+                raise ValueError("app must be a Start Menu shortcut name")
+            start_menus = [Path(os.environ.get("APPDATA", "")) / "Microsoft/Windows/Start Menu/Programs",
+                           Path(os.environ.get("PROGRAMDATA", "")) / "Microsoft/Windows/Start Menu/Programs"]
+            matches = []
+            for root in start_menus:
+                if root.is_dir():
+                    matches.extend(shortcut for shortcut in root.rglob("*.lnk")
+                                   if shortcut.stem.casefold() == app.casefold())
+            if len(matches) != 1:
+                raise ValueError("app name must match exactly one installed Start Menu shortcut")
+            path = matches[0]
         os.startfile(str(path))
         return {"path": str(path)}
 

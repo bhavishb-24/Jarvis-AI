@@ -81,6 +81,19 @@ class WindowsAdapterTests(unittest.TestCase):
             window.activate.assert_called_once()
             self.assertFalse(self.run_action("window.close", title="Missing")["ok"])
 
+    def test_launch_installed_app_by_exact_shortcut_name(self):
+        appdata = Path(self.temp.name) / "appdata"
+        shortcut_dir = appdata / "Microsoft/Windows/Start Menu/Programs"
+        shortcut_dir.mkdir(parents=True)
+        shortcut = shortcut_dir / "Chrome.lnk"
+        shortcut.write_bytes(b"shortcut")
+        with patch("companion.windows.sys.platform", "win32"), patch.dict(
+            "companion.windows.os.environ", {"APPDATA": str(appdata), "PROGRAMDATA": str(self.root)}
+        ), patch("companion.windows.os.startfile", create=True) as start:
+            self.assertTrue(self.run_action("app.launch", app="chrome")["ok"])
+            start.assert_called_once_with(str(shortcut))
+            self.assertFalse(self.run_action("app.launch", app="../Chrome")["ok"])
+
     def test_missing_dependency_is_explicit(self):
         with patch("companion.windows.sys.platform", "win32"), patch(
             "companion.windows.importlib.import_module", side_effect=ImportError("missing")
