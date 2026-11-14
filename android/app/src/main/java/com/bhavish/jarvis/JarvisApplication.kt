@@ -10,7 +10,7 @@ import com.bhavish.jarvis.provider.ProviderManager
 class JarvisApplication : Application() {
     val database: JarvisDatabase by lazy {
         Room.databaseBuilder(this, JarvisDatabase::class.java, "jarvis.db")
-            .addMigrations(JarvisDatabase.MIGRATION_1_2).build()
+            .addMigrations(JarvisDatabase.MIGRATION_1_2, JarvisDatabase.MIGRATION_2_3).build()
     }
     val settings: SettingsStore by lazy { SettingsStore(this) }
     val vault: KeyVault by lazy { KeyVault(this) }

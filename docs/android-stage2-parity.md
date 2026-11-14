@@ -9,7 +9,7 @@
 | Background tasks | Android WorkManager and companion threads | Idempotent task IDs, progress, cancellation, interrupted review |
 | Deep research and source verification | Stage 1 chat provider only | Dedicated multi-source research workflow not implemented |
 | Task checkpoints | Implemented | Companion SQLite step checkpoints; interrupted tasks require review |
-| Routines and reminders | Placeholder | Scheduling and permissions not implemented |
+| Routines and reminders | Basic Android scheduling implemented | WorkManager tasks and local notifications; exact alarms and rich routine editing are not implemented |
 | Plugin system | Stage 1 desktop plugins remain | No Android plugin registry or capability routing yet |
 | Remote dashboard | Android Devices and Tasks screens | No separate web dashboard |
 | Voice customization | Preserved from Stage 1 | Android voice settings remain |

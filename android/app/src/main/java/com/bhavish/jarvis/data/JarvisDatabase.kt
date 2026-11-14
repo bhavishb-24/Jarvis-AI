@@ -79,14 +79,20 @@ interface ConversationDao {
 
 @Database(entities = [MemoryEntity::class, ConversationEntity::class, MessageEntity::class,
     ComputerEntity::class, AgentTaskEntity::class, AgentTaskStepEntity::class,
-    TaskEventEntity::class], version = 2, exportSchema = true)
+    TaskEventEntity::class, ScheduledItemEntity::class], version = 3, exportSchema = true)
 abstract class JarvisDatabase : RoomDatabase() {
     abstract fun memories(): MemoryDao
     abstract fun conversations(): ConversationDao
     abstract fun computers(): ComputerDao
     abstract fun agentTasks(): AgentTaskDao
+    abstract fun schedules(): ScheduleDao
 
     companion object {
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS `scheduled_items` (`id` TEXT NOT NULL, `kind` TEXT NOT NULL, `title` TEXT NOT NULL, `deviceId` TEXT NOT NULL, `stepsJson` TEXT NOT NULL, `dueAt` INTEGER NOT NULL, `repeatMinutes` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `lastRunAt` INTEGER NOT NULL, PRIMARY KEY(`id`))")
+            }
+        }
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS `computers` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `platform` TEXT NOT NULL, `wifiUrl` TEXT NOT NULL, `fingerprint` TEXT NOT NULL, `usbPort` INTEGER NOT NULL, `useUsb` INTEGER NOT NULL, `lastStatus` TEXT NOT NULL, `lastSeen` INTEGER NOT NULL, PRIMARY KEY(`id`))")

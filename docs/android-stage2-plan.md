@@ -15,6 +15,7 @@
 - [x] Add validated natural-language action planning through the selected AI provider.
 - [x] Add authenticated screenshot artifacts and Android display.
 - [ ] Add a bounded image context path for vision-enabled planning.
-- [ ] Add routines/reminders, research with source checks, and plugin capability routing where they can be implemented without independent agent reasoning.
+- [x] Add basic WorkManager routines and local reminders; sensitive routine runs wait for phone approval.
+- [ ] Add research with source checks and plugin capability routing without independent agent reasoning.
 - [x] Run Python tests and Android unit tests/build/lint.
 - [ ] Run Android, Windows, GUI, USB, Wi-Fi, and VPN hardware smoke tests when equipment is available; document gaps.
