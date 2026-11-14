@@ -16,6 +16,7 @@
 - [x] Add authenticated screenshot artifacts and Android display.
 - [ ] Add a bounded image context path for vision-enabled planning.
 - [x] Add basic WorkManager routines and local reminders; sensitive routine runs wait for phone approval.
-- [ ] Add research with source checks and plugin capability routing without independent agent reasoning.
+- [x] Add per-computer built-in capability routing without independent agent reasoning.
+- [ ] Add research with source checks and third-party plugin support.
 - [x] Run Python tests and Android unit tests/build/lint.
 - [ ] Run Android, Windows, GUI, USB, Wi-Fi, and VPN hardware smoke tests when equipment is available; document gaps.

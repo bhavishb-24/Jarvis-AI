@@ -19,6 +19,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from .contract import ACTIONS
+from .system_status import collect_system_status
 
 
 MAX_TEXT = 1_048_576
@@ -348,14 +349,8 @@ class WindowsAdapter:
         return {"pid": pid}
 
     def _system_status(self, args, cancel):
-        data = {"platform": self.platform, "capabilities": self.capabilities()}
-        if sys.platform == "win32":
-            try:
-                psutil = self._module("psutil")
-                data.update(cpu_percent=psutil.cpu_percent(interval=None),
-                            memory_percent=psutil.virtual_memory().percent)
-            except Unavailable:
-                pass
+        data = collect_system_status(self.platform)
+        data["capabilities"] = self.capabilities()
         return data
 
     def _system_apps(self, args, cancel):

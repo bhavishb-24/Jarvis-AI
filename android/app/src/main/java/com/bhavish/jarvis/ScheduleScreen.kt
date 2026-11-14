@@ -74,7 +74,7 @@ internal fun ScheduleScreen(app: JarvisApplication) {
                     Button(onClick = {
                         busy = true
                         scope.launch {
-                            try { plan = ComputerPlanner(app).plan(title); message = "Review the routine plan" }
+                            try { plan = ComputerPlanner(app).plan(title, selected?.id); message = "Review the routine plan" }
                             catch (error: Exception) { message = error.message ?: "Planning failed" }
                             finally { busy = false }
                         }

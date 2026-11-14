@@ -17,6 +17,7 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 from .contract import ACTIONS
+from .system_status import collect_system_status
 
 
 MAX_FILE_BYTES = 2 * 1024 * 1024
@@ -352,9 +353,10 @@ class MacAdapter:
 
     def _system(self, operation: str, args: dict, cancel: threading.Event) -> dict:
         if operation == "status":
-            return {"platform": self.platform, "os_version": platform.mac_ver()[0],
-                    "screen_recording": _screen_permission(),
-                    "accessibility": _accessibility_permission()}
+            return dict(collect_system_status(self.platform),
+                        os_version=platform.mac_ver()[0],
+                        screen_recording=_screen_permission(),
+                        accessibility=_accessibility_permission())
         if operation == "apps":
             applications = Path("/Applications")
             names = sorted(path.stem for path in applications.glob("*.app")) if applications.exists() else []

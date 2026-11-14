@@ -4,6 +4,7 @@ import android.content.Context
 import com.bhavish.jarvis.provider.ModelRoute
 import com.bhavish.jarvis.provider.ProviderId
 import com.bhavish.jarvis.provider.TaskKind
+import com.bhavish.jarvis.tasks.CapabilityPolicy
 
 class SettingsStore(context: Context) {
     private val prefs = context.getSharedPreferences("jarvis_settings", Context.MODE_PRIVATE)
@@ -38,4 +39,17 @@ class SettingsStore(context: Context) {
     var speakResponses: Boolean
         get() = prefs.getBoolean("speak", false)
         set(value) { prefs.edit().putBoolean("speak", value).apply() }
+
+    fun capabilityEnabled(deviceId: String, action: String): Boolean =
+        prefs.getBoolean("capability_${deviceId}_${CapabilityPolicy.group(action)}", true)
+
+    fun capabilityGroupEnabled(deviceId: String, group: String): Boolean {
+        require(group in CapabilityPolicy.groups)
+        return prefs.getBoolean("capability_${deviceId}_$group", true)
+    }
+
+    fun setCapabilityGroup(deviceId: String, group: String, enabled: Boolean) {
+        require(group in CapabilityPolicy.groups)
+        prefs.edit().putBoolean("capability_${deviceId}_$group", enabled).apply()
+    }
 }

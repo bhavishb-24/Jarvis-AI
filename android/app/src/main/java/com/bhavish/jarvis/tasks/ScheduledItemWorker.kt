@@ -55,6 +55,7 @@ class ScheduledItemWorker(context: Context, params: WorkerParameters) : Coroutin
                 val step = steps.getJSONObject(index)
                 val action = step.getString("action")
                 if (action !in ActionPlanParser.allowedActions) return Result.failure()
+                if (!app.settings.capabilityEnabled(device.id, action)) return Result.failure()
                 AgentTaskStepEntity(taskId = taskId, position = index, action = action,
                     argsJson = step.getJSONObject("args").toString(), sensitive = step.getBoolean("sensitive"))
             }

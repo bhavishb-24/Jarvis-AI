@@ -195,7 +195,7 @@ private fun JarvisRoot(app: JarvisApplication, voice: VoiceManager) {
                     Page.DEVICES -> DevicesScreen(app)
                     Page.TASKS -> TasksScreen(app)
                     Page.ROUTINES -> ScheduleScreen(app)
-                    Page.PLUGINS -> FutureScreen("Plugins", "Android plugin execution is planned for a later stage. Desktop Python plugins remain in the desktop app.")
+                    Page.PLUGINS -> CapabilityScreen(app)
                     Page.SETTINGS -> SettingsScreen(onProviders = { page = Page.PROVIDERS },
                         onVoice = { page = Page.VOICE })
                 }

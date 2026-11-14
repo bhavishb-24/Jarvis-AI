@@ -146,7 +146,7 @@ internal fun TasksScreen(app: JarvisApplication) {
                     if (busy) return@Button
                     busy = true
                     scope.launch {
-                        try { plan = ComputerPlanner(app).plan(request); notice = "Review the actions below" }
+                        try { plan = ComputerPlanner(app).plan(request, selected?.id); notice = "Review the actions below" }
                         catch (error: Exception) { notice = error.message ?: "Planning failed" }
                         finally { busy = false }
                     }

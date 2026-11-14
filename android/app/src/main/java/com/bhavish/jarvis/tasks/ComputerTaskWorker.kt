@@ -33,6 +33,10 @@ class ComputerTaskWorker(context: Context, params: WorkerParameters) : Coroutine
             return Result.failure()
         }
         val steps = dao.steps(id)
+        if (steps.any { !app.settings.capabilityEnabled(device.id, it.action) }) {
+            dao.update(id, "failed", local.progress, steps.size, "A computer capability was disabled")
+            return Result.failure()
+        }
         if (steps.any { it.sensitive } && !local.approved) {
             dao.update(id, "failed", 0, steps.size, "Human approval required")
             return Result.failure()

@@ -38,6 +38,8 @@ The current pairing code is consumed once. Restart the agent to issue a new code
 
 ## Supported actions and limits
 
+The Android Plugins screen controls built-in capability groups for each paired computer. Disabling a group also blocks queued tasks and routines that use it.
+
 Android routines use WorkManager scheduling and create a fresh task each run. Sensitive steps wait for approval on the phone every time. Reminder notifications need notification permission on Android 13 and later.
 
 The agent accepts only the action names in `companion/contract.py`. Sensitive actions require approval recorded on the phone. File operations and direct executable paths are limited to the `--root` folders, including resolved symlinks. On Windows, `app.launch` can also find one exact Start Menu shortcut name (for example, `Chrome`) without granting access to Program Files. No arbitrary shell command action exists. Browser automation is limited to an agent-owned Playwright browser. Screenshots are stored as authenticated artifacts. Audit records and checkpoints are in the agent's SQLite journal.
