@@ -4,6 +4,7 @@ import platform
 from pathlib import Path
 import signal
 import threading
+from urllib.parse import quote
 
 from .server import CompanionServer
 
@@ -30,6 +31,8 @@ def main():
     print("HTTPS address:", server.address, flush=True)
     print("SHA-256 fingerprint:", server.fingerprint, flush=True)
     print("One-time pairing code:", server.pairing_code, flush=True)
+    parts = ("JARVIS_PAIR_V1", server.address, server.fingerprint, server.pairing_code)
+    print("JARVIS pairing text:", "|".join(quote(part, safe="") for part in parts), flush=True)
     print("Allowed file roots:", ", ".join(str(root) for root in adapter.allowed_roots), flush=True)
     print("Available actions:", ", ".join(adapter.capabilities()), flush=True)
     print("Keep this window open. Press Ctrl+C to stop.", flush=True)

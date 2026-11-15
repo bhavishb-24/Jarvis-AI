@@ -19,15 +19,24 @@ class CompanionHttpException(val status: Int, message: String) : IOException(mes
 
 /** TLS identity is verified against the fingerprint read from the computer's local console. */
 class CompanionClient {
-    private fun canonicalFingerprint(value: String): String {
+    companion object {
+        fun canonicalFingerprint(value: String): String {
         val clean = value.replace(":", "").replace(" ", "").uppercase()
         require(clean.matches(Regex("[0-9A-F]{64}"))) { "Enter the 64-character SHA-256 fingerprint" }
         return clean
     }
 
+        fun validateAddress(value: String): String {
+            val url = URL(value.trim())
+            require(url.protocol == "https" && url.userInfo == null && url.host.isNotBlank()) {
+                "A valid HTTPS address is required"
+            }
+            return value.trimEnd('/')
+        }
+    }
+
     private fun connection(base: String, fingerprint: String, path: String, token: String): HttpsURLConnection {
-        val url = URL(base.trimEnd('/') + path)
-        require(url.protocol == "https" && url.userInfo == null && url.host.isNotBlank()) { "A valid HTTPS address is required" }
+        val url = URL(validateAddress(base) + path)
         val expected = canonicalFingerprint(fingerprint)
         val verifier = object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) = Unit

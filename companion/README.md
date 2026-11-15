@@ -22,7 +22,7 @@ python3 -m companion --root "$HOME/Desktop" --root "$HOME/Downloads"
 py -m companion --root "$env:USERPROFILE\Desktop" --root "$env:USERPROFILE\Downloads"
 ```
 
-The default address is `https://127.0.0.1:8765`. The console prints the certificate's SHA-256 fingerprint and a one-time pairing code valid for ten minutes. Enter both in Android **Devices**. Compare the fingerprint directly with the local console before pairing. The private key and SQLite journal stay in `~/.jarvis-companion` (or `--data-dir`). Do not share that directory.
+The default address is `https://127.0.0.1:8765`. The console prints a single **JARVIS pairing text** line containing the address, SHA-256 fingerprint, and a one-time pairing code valid for ten minutes. Send that line to your phone through a private channel, then paste it in Android **Devices** and tap **Load pairing text**. Compare the fingerprint directly with the local console before pairing. The private key and SQLite journal stay in `~/.jarvis-companion` (or `--data-dir`). Do not share that directory.
 
 For a USB development connection, enable USB debugging on the phone, authorize the computer in Android's ADB prompt, and run:
 

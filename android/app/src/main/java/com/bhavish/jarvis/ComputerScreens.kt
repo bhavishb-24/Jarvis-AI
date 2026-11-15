@@ -38,6 +38,7 @@ import com.bhavish.jarvis.tasks.CompanionClient
 import com.bhavish.jarvis.tasks.CompanionHttpException
 import com.bhavish.jarvis.tasks.ComputerPlanner
 import com.bhavish.jarvis.tasks.ComputerTaskWorker
+import com.bhavish.jarvis.tasks.PairingPackage
 import kotlinx.coroutines.launch
 import java.util.UUID
 import org.json.JSONObject
@@ -50,6 +51,7 @@ internal fun DevicesScreen(app: JarvisApplication) {
     var address by remember { mutableStateOf("") }
     var fingerprint by remember { mutableStateOf("") }
     var code by remember { mutableStateOf("") }
+    var pairingText by remember { mutableStateOf("") }
     var usb by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("") }
@@ -57,7 +59,17 @@ internal fun DevicesScreen(app: JarvisApplication) {
         item {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("Pair a computer")
-                Text("Read the HTTPS address, SHA-256 fingerprint, and one-time code from the agent's local console.")
+                Text("Paste the single JARVIS pairing text from the computer, then pair. The detailed fields remain available if needed.")
+                OutlinedTextField(pairingText, { pairingText = it }, label = { Text("JARVIS pairing text") }, modifier = Modifier.fillMaxWidth())
+                OutlinedButton(onClick = {
+                    try {
+                        val packageInfo = PairingPackage.parse(pairingText)
+                        address = packageInfo.address
+                        fingerprint = packageInfo.fingerprint
+                        code = packageInfo.code
+                        message = "Pairing details loaded"
+                    } catch (error: Exception) { message = error.message ?: "Invalid pairing text" }
+                }, enabled = pairingText.isNotBlank()) { Text("Load pairing text") }
                 OutlinedTextField(name, { name = it }, label = { Text("Computer name") }, modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(address, { address = it }, label = { Text("HTTPS address") }, modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(fingerprint, { fingerprint = it }, label = { Text("Certificate fingerprint") }, modifier = Modifier.fillMaxWidth())
